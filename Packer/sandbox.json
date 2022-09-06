@@ -1,8 +1,8 @@
 {
   "variables": {
-    "iso_checksum": "27e4feb9102f7f2b21ebdb364587902a70842fb550204019d1a14b120918e455",
+    "iso_checksum": "36F4FA2416D0982697AB106E3A72D2E120DBCDB6CC54FD3906D06120D0653808",
     "iso_checksum_type": "sha256",
-    "iso_url": "https://software-download.microsoft.com/download/pr/17134.1.180410-1804.rs4_release_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso",
+    "iso_url": "https://cuckoo.sh/win7ultimate.iso",
     "autounattend": "./answer_files/10/Autounattend.xml",
     "disk_size": "61440"
   },
@@ -12,8 +12,7 @@
       "vm_name": "sandbox",
       "communicator": "winrm",
       "iso_url": "{{user `iso_url`}}",
-      "iso_checksum_type": "{{user `iso_checksum_type`}}",
-      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum": "{{user `iso_checksum_type`}}:{{user `iso_checksum`}}",
       "headless": false,
       "boot_wait": "6m",
       "boot_command": "",
