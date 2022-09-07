@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "cuckoo" do |cfg|
-    cfg.vm.box = "bento/ubuntu-20.04"
+    cfg.vm.box = "bento/ubuntu-16.04"
     cfg.vm.hostname = "cuckoo"
     config.vm.provision :shell, path: "bootstrap.sh"
     cfg.vm.network :private_network, ip: "192.168.30.100", gateway: "192.168.30.1", dns: "8.8.8.8"
