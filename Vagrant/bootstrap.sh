@@ -92,6 +92,10 @@ configure_cuckoo() {
   supervisorctl start cuckoo:
 }
 
+cuckoo_api() {
+  cuckoo api
+}
+
 main() {
   apt_install_prerequisites
   fix_eth1_static_ip
