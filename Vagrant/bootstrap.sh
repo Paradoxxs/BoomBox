@@ -21,7 +21,7 @@ apt_install_prerequisites() {
   apt-get -qq update
   apt-get -qq install -y apt-fast
   echo "[$(date +%H:%M:%S)]: Running apt-fast install..."
-  apt-fast -qq install -y crudini python python-pip python-dev libffi-dev libssl-dev python-virtualenv python-setuptools libjpeg-dev zlib1g-dev swig mongodb postgresql libpq-dev tcpdump apparmor-utils libcap2-bin libguac-client-rdp0 libguac-client-vnc0 libguac-client-ssh0 guacd samba-common-bin
+  apt-fast -qq install -y crudini python python-dev libffi-dev libssl-dev python-virtualenv python-setuptools libjpeg-dev zlib1g-dev swig mongodb postgresql libpq-dev tcpdump apparmor-utils libcap2-bin libguac-client-rdp0 libguac-client-vnc0 libguac-client-ssh0 guacd samba-common-bin
   echo "[$(date +%H:%M:%S)]: Installing and configuring inetsim..."
   echo "deb http://www.inetsim.org/debian/ binary/" > /etc/apt/sources.list.d/inetsim.list
   wget -O - http://www.inetsim.org/inetsim-archive-signing-key.asc | apt-key add -
@@ -32,7 +32,12 @@ apt_install_prerequisites() {
   sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/inetsim
   service inetsim restart
   echo "[$(date +%H:%M:%S)]: Installing Supervisor..."
+  
+  curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py | python get-pip.py
+  
   pip install -U supervisor
+  
+  
 }
 
 configure_prerequisites() {
