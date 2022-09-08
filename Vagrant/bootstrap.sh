@@ -21,7 +21,10 @@ apt_install_prerequisites() {
   apt-get -qq update
   apt-get -qq install -y apt-fast
   echo "[$(date +%H:%M:%S)]: Running apt-fast install..."
-  apt-fast -qq install -y crudini python python-dev libffi-dev libssl-dev python-virtualenv python-setuptools libjpeg-dev zlib1g-dev swig mongodb postgresql libpq-dev tcpdump apparmor-utils libcap2-bin libguac-client-rdp0 libguac-client-vnc0 libguac-client-ssh0 guacd samba-common-bin
+  apt-fast -qq install -y crudini python python-dev python-pip libffi-dev libssl-dev python-virtualenv python-setuptools libjpeg-dev zlib1g-dev swig mongodb postgresql libpq-dev tcpdump apparmor-utils libcap2-bin libguac-client-rdp0 libguac-client-vnc0 libguac-client-ssh0 guacd samba-common-bin
+  curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
+  python get-pip.py
+  
   echo "[$(date +%H:%M:%S)]: Installing and configuring inetsim..."
   echo "deb http://www.inetsim.org/debian/ binary/" > /etc/apt/sources.list.d/inetsim.list
   wget -O - http://www.inetsim.org/inetsim-archive-signing-key.asc | apt-key add -
@@ -32,11 +35,10 @@ apt_install_prerequisites() {
   sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/inetsim
   service inetsim restart
   echo "[$(date +%H:%M:%S)]: Installing Supervisor..."
-  
-  curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py | python get-pip.py
-  
+  pip install --upgrade pip 
   pip install -U supervisor
-  
+  echo "[$(date +%H:%M:%S)]: Installing python3..."
+  apt-get -qq install -y python3
   
 }
 
@@ -68,7 +70,7 @@ configure_cuckoo() {
   crudini --set $CUCKOO_CONF cuckoo version_check no
   crudini --set $CUCKOO_CONF cuckoo ignore_vulnerabilities yes
   crudini --set $CUCKOO_CONF cuckoo process_results no
-  crudini --set $CUCKOO_CONF timeouts vm_state 300
+  crudini --set $CUCKOO_CONF timeouts vm_state 3000
   crudini --set $CUCKOO_CONF cuckoo machinery physical
   crudini --set $CUCKOO_CONF resultserver ip 192.168.30.100
   crudini --set $CUCKOO_REPORTING mongodb enabled yes
@@ -86,6 +88,7 @@ configure_cuckoo() {
   SUPERVISORD_CONF=/root/.cuckoo/supervisord.conf
   cp /vagrant/resources/supervisord.conf $SUPERVISORD_CONF
 
+  supervisord -c $SUPERVISORD_CONF
   echo "[$(date +%H:%M:%S)]: Enable supervisord in systemctl"
   cp /vagrant/resources/supervisord.service /lib/systemd/system/
   systemctl enable supervisord

@@ -5,9 +5,9 @@ After=network.target
 
 [Service]
 Type=forking
-ExecStart=/usr/local/bin/supervisord -c /root/.cuckoo/supervisord.conf
-ExecStop=/usr/local/bin/supervisorctl shutdown
-ExecReload=/usr/local/bin/supervisorctl reload
+ExecStart=/usr/bin/supervisord -c /root/.cuckoo/supervisord.conf
+ExecStop=/usr/bin/supervisorctl shutdown
+ExecReload=/usr/bin/supervisorctl reload
 
 [Install]
 WantedBy=multi-user.target
